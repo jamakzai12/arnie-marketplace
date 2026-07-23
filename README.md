@@ -74,7 +74,7 @@ The easiest way to run Arnie with Claude is the Arnie desktop app: your workspac
 Claude terminal side by side, automatic device registration and key rotation, and a
 guided setup checklist.
 
-**[⬇ Download Arnie for macOS (Apple Silicon)](https://github.com/jamakzai12/arnie-marketplace/releases/latest/download/Arnie-0.1.0-arm64.dmg)**
+**[⬇ Download Arnie for macOS (Apple Silicon)](https://github.com/jamakzai12/arnie-marketplace/releases/latest/download/Arnie-macOS-AppleSilicon.dmg)**
 · [all releases](https://github.com/jamakzai12/arnie-marketplace/releases) · SHA-256
 checksums are attached to every release.
 
