@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "arnie": {
+      "type": "http",
+      "url": "https://www.arnies.ai/mcp",
+      "headers": { "Authorization": "Bearer ${ARNIE_MCP_KEY}" }
+    }
+  }
+}
