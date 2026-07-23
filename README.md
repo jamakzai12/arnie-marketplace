@@ -88,6 +88,9 @@ guided setup checklist. Get it at [arnies.ai](https://www.arnies.ai).
 | `recipe-creation` | Manual workflow structure: seeds, pagination, child tables, dedupe |
 | `formulas-conditions` | Formula syntax, condition gating, sentinel handling |
 | `cost-approval` | The spend gate: prove tiny, price the run, cap it, ask once |
+| `workflow-functions` | Reusable saved functions: search, call, reconcile, and save |
+| `ai-columns` | AI-generated columns: prompt craft, model choice, and boundaries |
+| `workbench-query` | Read-only SQL over your tables and workspace for analysis |
 
 **GTM motion skills:**
 
@@ -102,6 +105,15 @@ guided setup checklist. Get it at [arnies.ai](https://www.arnies.ai).
 | `linkedin-url-lookup` | Resolving LinkedIn profiles with identity validation |
 | `niche-signal-discovery` | Mining closed-won/lost accounts for niche ICP signals |
 | `personalization-loop` | Converging on truthful outbound copy at scale |
+
+**Analysis & measurement skills:**
+
+| Skill | What it teaches Claude |
+|---|---|
+| `workspace-data-analysis` | Answering from existing workspace data before new work |
+| `list-quality-scorecard` | Grading and gating a lead list before outreach |
+| `positive-reply-scoring` | Comparing campaigns by positive-reply rate, not volume |
+| `outcome-tracking` | Tagging tables so results match back to campaigns |
 
 New skills ship with plugin updates — run `/plugin marketplace update arnie` to get the latest.
 

@@ -3,14 +3,14 @@
   "owner": { "name": "Arnie", "email": "team@arnies.ai" },
   "metadata": {
     "description": "Arnie's official Claude Code plugin — the GTM workspace skills and MCP wiring.",
-    "version": "0.3.0"
+    "version": "0.4.0"
   },
   "plugins": [
     {
       "name": "arnie",
       "source": "./",
       "description": "Arnie GTM workspace: tables, workflows, ingredients, and remote MCP.",
-      "version": "0.3.0",
+      "version": "0.4.0",
       "strict": true
     }
   ]
