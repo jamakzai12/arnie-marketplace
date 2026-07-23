@@ -72,7 +72,16 @@ this whole setup with a live checklist.
 
 The easiest way to run Arnie with Claude is the Arnie desktop app: your workspace and a
 Claude terminal side by side, automatic device registration and key rotation, and a
-guided setup checklist. Get it at [arnies.ai](https://www.arnies.ai).
+guided setup checklist.
+
+**[⬇ Download Arnie for macOS (Apple Silicon)](https://github.com/jamakzai12/arnie-marketplace/releases/latest/download/Arnie-0.1.0-arm64.dmg)**
+· [all releases](https://github.com/jamakzai12/arnie-marketplace/releases) · SHA-256
+checksums are attached to every release.
+
+First launch on macOS: right-click **Arnie.app → Open → Open** (this early build is not
+yet Apple-notarized). Intel macOS and Windows builds are planned. The app is a thin
+setup shell — all workflows, data, and billing stay in your Arnie workspace on Arnie's
+servers, and no key or secret ships inside the app.
 
 ## Skills in this plugin
 
