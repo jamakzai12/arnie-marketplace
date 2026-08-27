@@ -1,0 +1,31 @@
+{
+  "name": "arnie",
+  "version": "0.6.0",
+  "description": "Arnie CLI skills for building and operating GTM workflows from Codex.",
+  "author": {
+    "name": "Arnie",
+    "email": "hello@arnies.ai",
+    "url": "https://www.arnies.ai"
+  },
+  "homepage": "https://www.arnies.ai",
+  "repository": "https://github.com/jamakzai12/arnie-marketplace",
+  "license": "Proprietary",
+  "keywords": ["arnie", "gtm", "cli", "tables", "workflows", "prospecting", "enrichment"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Arnie",
+    "shortDescription": "Build and run GTM workflows with the Arnie CLI",
+    "longDescription": "Use the Arnie CLI and 24 focused skills to build tables, enrich leads, run prospecting workflows, and analyze GTM results.",
+    "developerName": "Arnie",
+    "category": "Productivity",
+    "capabilities": ["Interactive", "Read", "Write"],
+    "websiteURL": "https://www.arnies.ai",
+    "defaultPrompt": [
+      "Use Arnie to build a qualified prospect list",
+      "Analyze my Arnie workspace results",
+      "Build a reusable GTM workflow in Arnie"
+    ],
+    "brandColor": "#0F766E",
+    "screenshots": []
+  }
+}

@@ -2,15 +2,15 @@
   "name": "arnie",
   "owner": { "name": "Arnie", "email": "team@arnies.ai" },
   "metadata": {
-    "description": "Arnie's official Claude Code plugin — the GTM workspace skills and MCP wiring.",
-    "version": "0.4.0"
+    "description": "Arnie's official Claude Code plugin — CLI-first GTM workspace skills.",
+    "version": "0.6.0"
   },
   "plugins": [
     {
       "name": "arnie",
-      "source": "./",
-      "description": "Arnie GTM workspace: tables, workflows, ingredients, and remote MCP.",
-      "version": "0.4.0",
+      "source": "./plugins/arnie",
+      "description": "Arnie GTM workspace: CLI-first tables, workflows, ingredients, and analysis.",
+      "version": "0.6.0",
       "strict": true
     }
   ]

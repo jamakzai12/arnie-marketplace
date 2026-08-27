@@ -1,8 +1,0 @@
-{
-  "name": "arnie",
-  "description": "Arnie GTM workspace for Claude Code — build tables, run workflows, save ingredients, and automate go-to-market over the Arnie remote MCP server.",
-  "version": "0.4.0",
-  "author": { "name": "Arnie", "url": "https://arnies.ai" },
-  "license": "UNLICENSED",
-  "keywords": ["arnie", "gtm", "mcp", "tables", "workflows", "prospecting", "enrichment"]
-}

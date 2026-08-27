@@ -1,0 +1,28 @@
+{
+  "name": "arnie-cli",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Install the Arnie CLI and agent skills from the public GitHub distribution.",
+  "license": "UNLICENSED",
+  "bin": {
+    "arnie": "./cli/arnie-cli.mjs"
+  },
+  "files": [
+    "cli/arnie-cli.mjs",
+    "plugins/arnie",
+    ".agents/plugins/marketplace.json",
+    ".claude-plugin/marketplace.json",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jamakzai12/arnie-marketplace.git"
+  },
+  "homepage": "https://www.arnies.ai",
+  "bugs": {
+    "url": "https://github.com/jamakzai12/arnie-marketplace/issues"
+  }
+}

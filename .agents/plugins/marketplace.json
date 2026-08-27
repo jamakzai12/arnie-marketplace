@@ -1,0 +1,20 @@
+{
+  "name": "arnie",
+  "interface": {
+    "displayName": "Arnie"
+  },
+  "plugins": [
+    {
+      "name": "arnie",
+      "source": {
+        "source": "local",
+        "path": "./plugins/arnie"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}
