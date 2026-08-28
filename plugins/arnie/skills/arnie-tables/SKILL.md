@@ -21,6 +21,12 @@ A table is a running machine, not a finished sheet. Read its live state before y
 - `copilot_workflow_workbench(action:"query")` — read-only SQL over `table_rows` / `table_cells` for filtering, counts, joins, sorting, and aggregates. Query is evidence, not a write path. Pass the explicit `tableId` whenever the table is known. In research mode, `query` is the only workbench action available — read-only analysis, no writes.
 - Table status reads are point-in-time. When a query reads `table_cells.status`, treat it as "observed at that moment": pending/claimed cell counts mean "unfinished when observed", not "wedged now". Only diagnose a stuck run after a fresh read proves no active run, no future wake, and runnable cells left unexecuted. Do not sleep in a loop waiting — continue independent ready work, or say background execution is running.
 
+When the user means the table currently open in Arnie, or the most recently opened table in that workspace, use the exact alias `tableId:"current_table"`. One call gives the concrete table id and name, visible columns, total row count, and a small sample:
+
+`copilot_read_rows({ tableId:"current_table", showRowData:true, limit:1 })`
+
+Use the same alias with workbench actions that need a table. If the tool returns `CURRENT_TABLE_NOT_AVAILABLE`, ask the user to open a table and retry the same call. Never guess a recent table.
+
 ## Shaping structured payloads
 
 Do not use AI to parse JSON. Shape structured fields with formula columns, `read_rows`, or `copilot_expand_array` first; AI reasons over plain scalars, not raw payloads.

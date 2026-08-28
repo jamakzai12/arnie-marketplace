@@ -28,7 +28,7 @@ Use this before `copilot_workflow_workbench(action:"query")` when the hard part 
 
 ## Current-table SQL
 
-When the chat has a current table, query these virtual tables. Pass the explicit `tableId` when you know which table you are debugging; if omitted, the workbench uses the current active table — always check the returned `tableId`/`tableName` receipt before treating an empty result as proof that data is empty. Do not add `table_id` filters inside `table_rows`/`table_cells`; those virtual tables are already scoped by the `tableId` argument and do not expose a `table_id` column.
+When the user means the table currently open in Arnie, or the most recently opened table in that workspace, pass the exact alias `tableId:"current_table"`. Pass the concrete table id when you already know which table you are debugging. Always check the returned `tableId`/`tableName` receipt before treating an empty result as proof that data is empty. If the tool returns `CURRENT_TABLE_NOT_AVAILABLE`, ask the user to open a table and retry the same call; never guess a recent table. Do not add `table_id` filters inside `table_rows`/`table_cells`; those virtual tables are already scoped by the `tableId` argument and do not expose a `table_id` column.
 
 | Table | Use for | Key columns |
 | --- | --- | --- |
@@ -72,7 +72,7 @@ SELECT row_id FROM workspace_cells WHERE column_id = 'company_domain'
 
 ## JSON and paths
 
-First read visible rows with `copilot_read_rows({ showRowData: true })` when a small sample is enough. Use `query` for one exact visible-value structure question: path sample, null coverage, array length, first-item keys, or which candidate path contains the requested value. Query the visible `value_json` (or `<name>_json`), then use a formula, an AI-normalization column, or `copilot_expand_array` on that visible value. Do not let query become a second workflow or a replacement for durable columns.
+First read visible rows with `copilot_read_rows({ tableId:"current_table", showRowData:true, limit:1 })` when a small sample of the current table is enough. Use `query` for one exact visible-value structure question: path sample, null coverage, array length, first-item keys, or which candidate path contains the requested value. Query the visible `value_json` (or `<name>_json`), then use a formula, an AI-normalization column, or `copilot_expand_array` on that visible value. Do not let query become a second workflow or a replacement for durable columns.
 
 ## Repair failed SQL
 

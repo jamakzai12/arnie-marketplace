@@ -3,14 +3,14 @@
   "owner": { "name": "Arnie", "email": "team@arnies.ai" },
   "metadata": {
     "description": "Arnie's official Claude Code plugin — CLI-first GTM workspace skills.",
-    "version": "0.6.0"
+    "version": "0.6.1"
   },
   "plugins": [
     {
       "name": "arnie",
       "source": "./plugins/arnie",
       "description": "Arnie GTM workspace: CLI-first tables, workflows, ingredients, and analysis.",
-      "version": "0.6.0",
+      "version": "0.6.1",
       "strict": true
     }
   ]
