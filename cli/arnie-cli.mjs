@@ -19624,7 +19624,7 @@ var OAUTH_SCOPES = [
 var OAUTH_SCOPE = OAUTH_SCOPES.join(" ");
 var TOOL_SCOPES = new Set(OAUTH_SCOPES.slice(0, 4));
 var ALLOWED_SCOPES = new Set(OAUTH_SCOPES);
-var DEFAULT_LOGIN_TIMEOUT_MS = 10 * 60 * 1e3;
+var DEFAULT_LOGIN_TIMEOUT_MS = 30 * 60 * 1e3;
 var LoginRequiredError = class extends Error {
   code = 401;
   constructor(message = "Authentication expired. Run arnie login.") {
@@ -20253,7 +20253,7 @@ async function probeIdentity(input) {
 
 // ../packages/arnie-cli/src/cli.ts
 var DEFAULT_TIMEOUT_MS = 12e4;
-var DEFAULT_LOGIN_TIMEOUT_MS2 = 10 * 60 * 1e3;
+var DEFAULT_LOGIN_TIMEOUT_MS2 = 30 * 60 * 1e3;
 var USAGE = `usage:
   arnie login                        sign in through your browser
   arnie logout                       remove this CLI's saved sign-in
@@ -20264,7 +20264,7 @@ var USAGE = `usage:
 
 flags:
   --json        wrap output in {ok,kind,...} so a script can branch without $?
-  --timeout N   milliseconds (default ${DEFAULT_TIMEOUT_MS}; login waits at least 10 minutes)
+  --timeout N   milliseconds (default ${DEFAULT_TIMEOUT_MS}; login waits at least 30 minutes)
   --            everything after this is a literal argument
 
 exit codes: 0 ok  1 tool failed  2 usage  3 auth  4 transport  5 retryable(429)`;
