@@ -1,7 +1,7 @@
 # Arnie CLI and agent skills
 
 Arnie is a GTM workspace where tables are workflows. The public package gives
-coding agents one normal command-line tool plus 24 skills for building and
+coding agents one normal command-line tool plus 25 skills for building and
 operating prospecting, enrichment, research, and outbound workflows.
 
 The CLI keeps the transport hidden. Users sign in through the browser; they do
@@ -21,7 +21,7 @@ npm install --global github:jamakzai12/arnie-marketplace
 arnie --version
 ```
 
-Then register the same 24 skills with the coding agent you use.
+Then register the same 25 skills with the coding agent you use.
 
 Codex:
 
@@ -73,8 +73,8 @@ claude plugin update arnie@arnie
 
 ## Included skills
 
-The package ships all 24 Arnie skills: the four core operating skills, workflow
-execution and authoring skills, prospecting motions, list-quality checks,
+The package ships all 25 Arnie skills: the four core operating skills, cell
+sequencing, workflow execution and authoring skills, prospecting motions, list-quality checks,
 personalization, and outcome analysis. Both clients load the same skill files.
 
 ## Support

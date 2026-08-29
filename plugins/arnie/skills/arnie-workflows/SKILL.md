@@ -1,6 +1,6 @@
 ---
 name: arnie-workflows
-description: Use the Arnie CLI to create, edit, approve, run, or scale Arnie workflows and recipes — GTM motions like prospecting, enrichment, and identity triangulation, plus confidence checks, pagination, branch admission, and the approval flow.
+description: Use for Arnie workflow decisions and execution, including table shape, proof, lineage, spend boundaries, approval boundaries, and routing paced actions to scheduled cells.
 ---
 
 # Arnie Workflows
@@ -13,67 +13,125 @@ or call MCP directly. If `arnie` is missing, run
 `npm install --global github:jamakzai12/arnie-marketplace`, then `arnie login`
 and `arnie tools`.
 
-A workflow is a connected table machine. Build the machine before collecting results: design the visible table state that can produce, filter, continue, retry, and rerun the data — then let the rows run.
+## Shared Arnie Workflow Methodology
 
-## Build order
+This is the decision layer for every Arnie surface. Tool names may change by
+surface, but these decisions do not.
 
-1. **Discover.** `copilot_search_workspace` for saved functions, ingredients, connected apps, and current tables. For row-work, search functions first: `copilot_search_workspace({ mode:"capabilities", provider:"function", query:"get <outcome> from <input>" })`, e.g. `get email from domain`. An empty result is the justification to build by hand.
-2. **Plan, then shell.** Before `copilot_create_recipe`, lay out the whole workflow in the conversation (tables, columns, providers, and the spend it implies) and get the user's explicit approval of that plan. Only then call it with the table name/intent and no initial rows/columns.
-3. **Configure.** `copilot_workflow_workbench` actions: `update_settings` (`addInputColumns`, `deduplicationKey`, persistent `inputDefaults`), then `add_rows` for seed rows, then `add_column` / `call_function` for the work.
-4. **Prove, then widen.** Preview a risky path with `copilot_workflow_workbench(action:"external_call")`, sample 2–3 rows with `rerun_columns`, read the values, then execute the rest.
+### Workflow model
 
-**Function-first row work is mandatory** — a matching function beats a hand-built column. Manual `add_column` is fallback only after no function fits, params do not fit, or exact-read proves the saved function stale.
+- **Tables are reusable workflows.** Rows hold the changing items or control
+  scope. Columns hold shared work that repeats for rows. Functions are reusable
+  row-work; manual columns are fallback only.
+- Build the connected machine before collecting production results:
+  `Control -> Filters -> Loop -> Items -> Work`.
+- Lists become child rows through a visible array plus `expand_array`. Set a
+  stable plain-input deduplication key before repeated expansion.
+- Work one saved path at a time:
+  `Choose -> Prove -> Lock -> Commit -> Observe Once -> Repair or Continue`.
 
-## Control → Filters → Loop → Items → Work
+### Decisions that must stay the same
 
-- **Control:** the highest stable source object (account, base, search, category, source URL).
-- **Filters:** visible inputs that change the result (query, view, date window, page size, geography, persona).
-- **Loop:** visible continuation/wait state (page, offset, cursor, next URL, job id, status, retry token).
-- **Items:** returned records — these become child rows through `copilot_expand_array`, not imported provider output.
-- **Work:** enrichment, cleanup, qualification, scoring, and draft-action columns on the item rows.
+- **Effort matches risk.** Act directly when the request and next action are
+  clear, cheap, bounded, and reversible. Investigate first when the route,
+  contract, spend, side effect, or scope is materially unclear. Ask only for a
+  remaining user-owned choice or boundary.
+- **Tool-fit proof happens before durable writes.** Discovery is a contract
+  lookup, not a ritual. Exact-read the best fitting reusable capability before
+  creating a table, adding manual work, calling a provider, or saving a tool.
+- **Sample before widening.** Prove 2-3 real rows of exactly what changed and
+  read the values. Repair the producing step before widening. New rows already
+  auto-cascade committed columns, so never rerun them after `add_rows`.
+- **Prove risky routes first.** Compare serious provider routes before lock.
+  Required value first beats coverage and fallback. Prefer the lowest total
+  expected cost among routes that meet the requirement; use a visible
+  `condition` for every fallback.
+- **Function-first row work is mandatory.** Install-then-Reconcile: inspect all
+  installed configs and fix prompts, conditions, formulas, mappings, literal
+  ids, and cost settings before any sample run.
+- **Cardinality decides the shape.** Once-total setup is not a column. Work that
+  consumes or produces one result per row is row work. Bulk payload support is
+  not a reason to hide row work in one external call.
+- **Row Provenance Rule.** `add_rows` carries only approved seeds, control state,
+  and static config. Provider, scrape, probe, or existing-table result data
+  enters through committed runtime columns and connected `expand_array`
+  lineage, never copied result rows.
+- **Work-set continuity preserves lineage, not current-row or schema reuse.**
+  New scope with the same control shape is another control row. Repeated output
+  entities become connected child rows. Do not open a disconnected replacement
+  route without branch-admission proof.
+- **Path lock.** Successful same-path proof or a committed user-facing column
+  then locks it for that current value. No admission proof means continue the
+  current route. Do not switch because another path looks easier, cleaner,
+  faster, or cheaper after lock.
+- **Conditions are part of column config.** Sentinel text is a missing value.
+  Values such as Unknown, No match, N/A, None, and Not found must not admit a
+  dependent paid or state-changing cell.
+- **Facts need sources.** Do not use AI as a JSON parser or invent external
+  facts. Contact matching needs company/domain anchors; a name alone never
+  confirms identity. Confidence labels are `High | Medium | Low | No match`.
+- **Never ask the user to paste secrets.** Use the surface's safe credential or
+  connection flow.
 
-## One row = one requested item
+### Approval and action boundary
 
-The final user-facing row must match the requested output shape; seed/control rows are allowed only as a route to it. If the best start is a bridge shape, say it plainly: source/seed rows → scrape/search/enrich → expand/extract → requested rows. A first page or one successful probe proves the method only — it is not full coverage. Never loop user items inside one probe or one AI prompt; a column handles one row and the executor loops. Do not invent missing external facts (email, phone, title, company, revenue) with AI or a formula — back them with a real source, or return Unknown/null and continue the real-data chain.
+- Financial approval is only for real credits or money. Free account actions
+  are outside the financial cost gate.
+- A clear request authorizes the described table automation. Send authorization
+  is confirmed in the conversation; it is not a table column.
+- Never create an approval, review, send-approval, or status column unless the
+  user explicitly asks for a per-row human approval button. Approval inputs are
+  opt-in and must never be invented as a normal safety step.
+- Direct state-changing work outside the requested table automation still needs
+  a clear instruction. For row-scale account actions, prove one safe cell, keep
+  an objective eligibility condition and durable completion result, and never
+  auto-retry an unknown or failed write.
 
-## Pagination
+### Time and pacing boundary
 
-Decide the plan before creating the shell, because it changes seed columns and child shape:
-- **Vertical growth:** independent page/offset/date/URL rows added with `add_rows` (seed values only).
-- **Horizontal growth:** page columns when page N+1 needs page N's returned cursor/token/next URL. Returned cursors go in extracted continuation columns and next-page formulas — never copied into `add_rows` seeds.
+- **Paced actions use scheduled cells, not scheduled columns.** Load the
+  `sequencing` owner and use `schedule_column_cells` on the existing executable
+  ingredient column.
+- Never create a schedule column, approval column, sender/account/campaign/step
+  table, or recurring column schedule to imitate per-cell pacing.
+- The user chooses the pace. Reuse the exact user-owned ingredient, preserve
+  unrelated and stricter proven limits, verify the saved pace, then schedule
+  its existing cells in table order.
+- Recurring schedules may rerun exact read, refresh, list, cleanup, or tracking
+  columns on a clock. They do not own outreach steps, delayed actions,
+  sender-account limits, or other paced row actions.
 
-## GTM motions
+## Marketplace CLI map
 
-- **Prospecting (net-new companies/people):** promote evidence rows to real entities only when identity is clear. Account rows = company name, domain, description, fit reason, proof. Contact rows = person, role, company/domain anchor, contact fields, confidence.
-- **Enrichment:** one owner column per fact, each backed by a real source/API — never invent salary, email, phone, title, or company with AI or a formula. Gate every dependent column with a `condition` that skips missing-or-sentinel anchors.
-- **Identity triangulation / contact matching needs company/domain anchors.** A name alone never confirms identity — match on company/domain plus at least one more fact (role, location, linked site, photo). Never deliver a guessed email pattern as the final answer; verify with an email-finder provider (name + domain in, verified email out).
-- **Waterfalls:** an ordered real-data chain. Provider B runs only where A is empty/null/skipped (coverage fill), or adds a different source-backed angle (strategy stack). Do not research fallback providers before the primary path hits an actual failure. End every column-level waterfall in one final scalar formula column (`{{primary}} || {{fallback}} || null`) that downstream steps read.
+- Discover with `copilot_search_workspace`. Exact-read the best result before a
+  durable call.
+- Start a table shell with `copilot_create_recipe`, then use
+  `copilot_workflow_workbench` for settings, seed rows, functions, columns,
+  samples, repairs, widening, and validation.
+- Use `copilot_expand_array` for connected child rows.
+- Use `copilot_save_ingredient` and `copilot_update_ingredient` only after live
+  evidence proves a reusable contract or saved contract needs changing.
+- For per-cell pacing, load **sequencing** before
+  `copilot_workflow_workbench(action:"schedule_column_cells")`.
 
-## Confidence and sentinels
+There is no selection-card tool on this surface. Ask the user directly in the
+conversation when a real user-owned answer is still needed. A clear request is
+already authorization for its described table automation; do not ask again and
+do not turn that authorization into an approval column.
 
-- Label match/scoring judgments as `High | Medium | Low | No match`. Estimates and signals are labeled as estimates, never presented as verified facts.
-- **Sentinel text is a missing value.** "Unknown", "No match", "N/A", "None", "Not found" pass a non-empty check because they are text — treat them exactly like empty. A provider call spent on a sentinel input is a wasted credit and a false result.
+## Marketplace execution notes
 
-## Staying on one route
-
-- **Same intent, same workflow lineage.** When the current table serves the intent, continue it. Per-entity rollups (unique companies from contacts, unique channels from videos) are an array/identity column plus `copilot_expand_array` with a child `deduplicationKey` — never a new `create_recipe` fed by rows copied from table data.
-- **Branch admission before competing routes.** A new or alternate table/route is not a normal next step. Before opening one, prove one admission reason. **No admission proof means continue the current route.**
-- **Path lock.** Once a path is proven or a user-facing column is committed, do not switch provider/source/tool because another looks easier or cheaper. Switch only after the locked path actually fails and cannot continue, or the user approves.
-
-## One-time setup is not a column
-
-A once-total side effect — create a campaign/list/audience/webhook/sheet, register a resource, send one summary — is never an `add_column`. Run it once with `copilot_workflow_workbench(action:"external_call")`, store the returned id in a source input column via `update_settings`/`add_rows`, and reference that input column in later formulas. If an action produces one output per row, it is row work: use a function or one owner column with a `condition` and idempotency. Bulk is not a loophole.
-
-## Clarify early, then execute
-
-Before durable writes, inspect visible context, current table/work-set state, and workspace candidates. If outcome-shaping details are missing (end goal, data type, filters, geography, volume, recency, personas, whether the output needs contactable emails), ask the user directly in this conversation once near the beginning — one message with usually 2–4 questions, never more than 5. There is no selection-card tool on this surface; you are already talking to the user. After durable table work has started, do not stop with "what next?" or provider menus; continue on the clarified goal and reasonable defaults. Ask again only for a user-owned value, credential, approval, destination, spend/coverage tradeoff, or irreducible ambiguity. Do not ask for self-resolvable config (workspace/list/campaign ids) — resolve it from memory, workspace assets, or a provider lookup, and confirm a recalled id still exists with a cheap read before committing rows to it.
-
-## Async work runs in the background
-
-After widening or expansion, never sleep just to wait for results. If the sample already proved the step, widened rows keep running while you continue independent ready work — or stop and say background execution is running. For polling/async providers, model start → status → result as visible columns (job id, status, retry token), not a sleep loop.
-
-After an `add_rows` append, never `rerun_columns` the new rows — `add_rows` already cascades every committed column across the connected lineage; a rerun double-charges. READ 2–3 new-row cells to confirm, then continue.
-
-## Tables scale later, so keep them connected
-
-Every table can be automated after its core path is proven. Schedules re-run exact columns on existing or control rows; inbound webhooks insert event rows. List outputs become new rows only through `copilot_expand_array` lineage. Keep result tracking, saved views, cleanup, schedules, and webhooks with their focused owners.
+- Before `copilot_create_recipe`, decide the table shape, pagination shape, and
+  likely paid path. Describe material choices when review is useful; do not add
+  a ritual plan approval to a clear, bounded request.
+- A first page or successful probe proves only the method. It is not full
+  coverage and its output is not seed data.
+- Vertical pagination uses independent static page/offset/date/URL control rows.
+  Horizontal pagination keeps returned cursor or next-URL state in columns.
+- A once-total side effect uses
+  `copilot_workflow_workbench(action:"external_call")`. Per-row actions use a
+  fitting function or one executable owner column with a condition and
+  idempotency.
+- After widening or expansion, do not sleep for completion. Run one bounded
+  observation, continue independent ready work, or say that background work is
+  still running.

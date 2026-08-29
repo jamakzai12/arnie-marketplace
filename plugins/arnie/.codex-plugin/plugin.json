@@ -1,6 +1,6 @@
 {
   "name": "arnie",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "description": "Arnie CLI skills for building and operating GTM workflows from Codex.",
   "author": {
     "name": "Arnie",
@@ -15,7 +15,7 @@
   "interface": {
     "displayName": "Arnie",
     "shortDescription": "Build and run GTM workflows with the Arnie CLI",
-    "longDescription": "Use the Arnie CLI and 24 focused skills to build tables, enrich leads, run prospecting workflows, and analyze GTM results.",
+    "longDescription": "Use the Arnie CLI and 25 focused skills to build tables, enrich leads, run prospecting workflows, and analyze GTM results.",
     "developerName": "Arnie",
     "category": "Productivity",
     "capabilities": ["Interactive", "Read", "Write"],

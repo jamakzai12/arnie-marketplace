@@ -1,6 +1,6 @@
 ---
 name: cost-approval
-description: Use the Arnie CLI before scaling any paid, row-scale run — enrichment columns, provider/ingredient calls, or sends. Prove tiny, price the run, cap it, ask once in the conversation. Not for free formula columns or a single read.
+description: Use the Arnie CLI before scaling paid or cost-unknown provider work. Prove tiny, price the real financial cost, cap it, and ask once. Free account actions are outside this gate.
 ---
 
 # Cost Approval
@@ -17,13 +17,12 @@ One loop: **prove tiny → price → cap → ask → run.** Get the user's expli
 
 ## When this gate applies
 
-A run is **paid** when it charges credits or spends the user's real account:
+A run is **paid** when it charges credits or creates a real financial cost:
 
 - an **enrichment column** with a `creditCost` — charges `rows × creditCost` (per cell, not per run).
 - a **provider/ingredient call at row-scale** — per-call scrapes/searches/enrichment across rows.
-- an **account or send action** (post/reply/DM/message/apply) — priced in account blast-radius, not credits.
 
-Exempt: formula-only columns, conditions, a single one-off read, cached reruns.
+Exempt: formula-only columns, conditions, free account actions, a single one-off read, and cached reruns.
 
 ## Price posture: cheapest equivalent first
 
@@ -38,7 +37,7 @@ Exempt: formula-only columns, conditions, a single one-off read, cached reruns.
 1. **Prove tiny.** 1–3 rows, or one safe `copilot_workflow_workbench(action:"external_call")` sample. Read the actual output AND the real per-cell cost. Fix and re-prove until clean. Never price a run you haven't proven.
 2. **Price the spend.** Show two numbers when they exist: the current advertised unit price from the ingredient's exact-read description, and the actual charged proof cost from `billing.cost_usd`. Use the observed charge to estimate the full run. For platform-credit columns, calculate `chargeable rows × creditCost per chargeable column`, summed across chargeable columns. Count only rows the `condition` actually admits.
 3. **Show the approval message** (template below). A missing section = not ready: run nothing paid.
-4. **Cap the run.** `maxRowsPerRun` + a self-draining `condition` so a bug can't overspend. The cap is the ceiling; approval is the trigger.
+4. **Cap the run.** Count admitted rows and rerun only the approved `rowIds`/`rowIndexes`. Never create a recurring schedule to cap a paid run. The cap is the ceiling; approval is the trigger.
 5. **Run once, then narrate:** what ran, what it cost, what's ready.
 
 There is **no tool to read the user's remaining balance** — price the SPEND; never invent a "credits remaining" number.
@@ -77,10 +76,14 @@ The preview is real persisted pilot output, never guessed. Include the firing `c
 - **Do not confuse advertised price with charged cost.** The ingredient description records the advertised rate; `billing.cost_usd` records what the proof actually charged. Show both.
 - **A stop is a spoken handoff, not a silent halt.** When the gate can't be satisfied, say so and hand back one clear next step. Scheduled/autonomous runs must report the blocker, never vanish.
 
-## Account and send actions
+## Account actions
 
-- **Never raise `maxRowsPerRun` on an account-acting column** unless the user explicitly asks. Copy-generation approval is not send approval; access to a sender does not authorize a send.
-- Real sends, posts, DMs, and outbound need explicit approval and never auto-scale — a whole-column rerun of an action is a spend AND blast-radius decision.
+- Copy-generation approval is not send approval; access to a sender does not authorize a send.
+- Free account actions are outside this financial gate. A clear request authorizes its
+  described table automation; send authorization stays in the conversation and is never
+  turned into an approval/review/status column. Load **sequencing** and schedule the existing
+  executable cells. If an action has real provider or credit cost, this gate approves only
+  that financial cost; it never creates a recurring column schedule.
 
 ## Gotchas
 
