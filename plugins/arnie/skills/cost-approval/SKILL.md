@@ -36,36 +36,15 @@ Exempt: formula-only columns, conditions, free account actions, a single one-off
 
 1. **Prove tiny.** 1–3 rows, or one safe `copilot_workflow_workbench(action:"external_call")` sample. Read the actual output AND the real per-cell cost. Fix and re-prove until clean. Never price a run you haven't proven.
 2. **Price the spend.** Show two numbers when they exist: the current advertised unit price from the ingredient's exact-read description, and the actual charged proof cost from `billing.cost_usd`. Use the observed charge to estimate the full run. For platform-credit columns, calculate `chargeable rows × creditCost per chargeable column`, summed across chargeable columns. Count only rows the `condition` actually admits.
-3. **Show the approval message** (template below). A missing section = not ready: run nothing paid.
-4. **Cap the run.** Count admitted rows and rerun only the approved `rowIds`/`rowIndexes`. Never create a recurring schedule to cap a paid run. The cap is the ceiling; approval is the trigger.
+3. **Ask once.** State the projected total or range, separate Arnies cost/credits, exact row scope, and cap in one concise question. A missing item = not ready: run nothing paid.
+4. **Cap the run.** Count admitted rows and rerun only the approved `rowIds`/`rowIndexes`. Never create a recurring schedule to cap a paid run. The cap is the ceiling; approval is the trigger. After the user approves in this CLI conversation, pass `showApprovalCard:false` and omit `projectedCost`/`arniesCost` because remote CLI/MCP cannot display Arnie Chat's web approval card.
 5. **Run once, then narrate:** what ran, what it cost, what's ready.
 
 There is **no tool to read the user's remaining balance** — price the SPEND; never invent a "credits remaining" number.
 
-## The approval message — exact template
+## Public CLI approval contract
 
-```text
-Assumptions
-- <intent assumption 1>
-- <intent assumption 2>
-
-CSV Preview (ASCII)
-<paste verbatim ASCII output from the real one-row Arnie pilot>
-
-Credits + Scope + Cap
-- Provider: <name>
-- Current advertised unit price: <price and basis, or unknown>
-- Actual charged pilot cost: <billing.cost_usd total and per returned result/call when measurable, or unknown>
-- Estimated credits: <value or range>
-- Full-run scope: <rows/items>
-- Spend cap: <cap>
-- Pilot summary: <one short paragraph>
-
-Approval Question
-Approve full run?
-```
-
-The preview is real persisted pilot output, never guessed. Include the firing `condition` in scope/pilot summary when one applies. Keep it short and scannable; the four header names are exact. Move to the full run only after the user's explicit confirmation in this conversation.
+This public agent runs through remote CLI/MCP, not the Arnie Chat approval-card surface. Never pass `showApprovalCard:true` here: it fails closed because this surface cannot show the card. Use the real persisted pilot as evidence, ask one short cost/scope/cap question, then call the approved rerun with `showApprovalCard:false`. Every sample rerun also passes `showApprovalCard:false`. Do not pass either cost field with `false`.
 
 ## Spend rules
 

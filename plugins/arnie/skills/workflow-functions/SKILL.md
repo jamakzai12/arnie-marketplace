@@ -51,7 +51,7 @@ Read `installedColumnIds`, `rootColumnIds`, `resolvedParams`, `autoMappedParamKe
 | Dependencies | Confirm every input exists and carries the current value |
 | Dependents | Note which columns need downstream refresh after an update |
 
-Use `copilot_workflow_workbench(action:"update_column")` for every mismatch **before** any rerun or sample. A carried literal destination id can write your rows to the source's campaign or list — sampling an unreconciled function column is as serious as widening an unproven one. Then rerun only `rootColumnIds` on 2-3 rows, refresh dependents only when required, and inspect real values before widening.
+Use `copilot_workflow_workbench(action:"update_column")` for every mismatch **before** any rerun or sample. A carried literal destination id can write your rows to the source's campaign or list — sampling an unreconciled function column is as serious as widening an unproven one. Then rerun only `rootColumnIds` on 2-3 rows with `showApprovalCard:false`, refresh dependents only when required, and inspect real values before widening. Remote CLI/MCP reruns always pass `false`; use **cost-approval** before paid widening.
 
 ## Update, remove, or keep
 

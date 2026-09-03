@@ -74,7 +74,7 @@ A name alone never confirms identity — match on company/domain plus at least o
 
 ### Credit and approval gate
 
-Paid or cost-unknown row work follows this blocking order: prove the exact path on 1–3 real rows → read the real output, behavior, and billing receipt (or honest unknown cost) → count only rows the final condition admits → estimate the full scope, set the run/spend cap, and show the approval message (see **cost-approval**) → run the full scope only after the user's explicit confirmation. For TAM sizing, prefer a free count endpoint, or `limit:1` only when the live contract proves the response includes the total. Stop after a pilot with low usable coverage, wrong matches, missing required fields, or high cost per usable row — repair the route before buying the same failure at scale.
+Paid or cost-unknown row work follows this blocking order: prove the exact path on 1–3 real rows → read the real output, behavior, and billing receipt (or honest unknown cost) → count only rows the final condition admits → estimate the full scope and cap → use **cost-approval** for one concise confirmation → run only that approved scope with `showApprovalCard:false`. For TAM sizing, prefer a free count endpoint, or `limit:1` only when the live contract proves the response includes the total. Stop after a pilot with low usable coverage, wrong matches, missing required fields, or high cost per usable row — repair the route before buying the same failure at scale.
 
 ## Handoffs
 

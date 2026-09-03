@@ -1,6 +1,6 @@
 {
   "name": "arnie-cli",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "private": true,
   "description": "Install the Arnie CLI and agent skills from the public GitHub distribution.",
   "license": "UNLICENSED",

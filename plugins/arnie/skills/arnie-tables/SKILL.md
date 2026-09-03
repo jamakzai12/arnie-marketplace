@@ -41,7 +41,7 @@ Before modifying, wiring from, or building on existing columns, call `copilot_wo
 
 ## Sample before widening
 
-After every `add_column`, `update_column`, `call_function`, expansion, or row append: rerun 2–3 rows of exactly what changed with `copilot_workflow_workbench(action:"rerun_columns")` (pass `rowIds`/`rowIndexes`), read the real values, and fix what is wrong. Do not widen, queue the whole table, or `expand_array` the output while the column is unproven. A failed or empty sample means fix and re-sample, not widen. Once proven, execute all remaining rows in that same step — nothing in the background fills unexecuted cells for you.
+After every `add_column`, `update_column`, `call_function`, expansion, or row append: rerun 2–3 rows of exactly what changed with `copilot_workflow_workbench(action:"rerun_columns", showApprovalCard:false)` (pass `rowIds`/`rowIndexes`), read the real values, and fix what is wrong. Remote CLI/MCP cannot show Arnie Chat's approval card, so every public-agent rerun must explicitly pass `false`; use **cost-approval** before paid widening. Do not widen, queue the whole table, or `expand_array` the output while the column is unproven. A failed or empty sample means fix and re-sample, not widen. Once proven, execute all remaining rows in that same step — nothing in the background fills unexecuted cells for you.
 
 Spend responsibly: on a large table, never rerun `cellStatus:"all"` or a whole column by default. Rerun the exact rows or `cellStatus:"failed"` cells the step needs; a whole-column rerun is a spend decision — confirm the tradeoff with the user first if it repeats expensive provider calls at scale.
 

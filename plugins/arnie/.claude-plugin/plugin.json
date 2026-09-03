@@ -1,7 +1,7 @@
 {
   "name": "arnie",
   "description": "Arnie CLI skills for Claude Code — build tables, run workflows, and automate go-to-market with the arnie command.",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "author": { "name": "Arnie", "url": "https://arnies.ai" },
   "license": "UNLICENSED",
   "keywords": ["arnie", "gtm", "cli", "tables", "workflows", "prospecting", "enrichment"]
