@@ -1,6 +1,9 @@
 ---
 name: arnie
-description: Use when working with the Arnie CLI, workspaces, tables, workflows, functions, ingredients, or GTM automation. Thin entry point that routes to the one owning skill.
+description: >-
+  Use when working with the Arnie CLI, workspaces, tables, workflows, functions,
+  ingredients, or GTM automation. Thin entry that routes to the owning skill.
+  For paid/credit runs, always load cost-approval first.
 ---
 
 # Arnie
@@ -27,3 +30,9 @@ Load only the owner for the immediate decision or tool call:
 
 Do not copy the workflow methodology into this router. Keeping it in
 **arnie-workflows** prevents the entry skill and execution skill from drifting.
+
+## Paid work (blocking)
+
+Before any paid or cost-unknown CLI run (Deepline, enrichment, prospecting at
+scale, credit-charging columns or reruns), **Read and follow `cost-approval`**.
+Show the ASCII cost preview and get an explicit user yes. Do not scale first.

@@ -75,7 +75,7 @@ surface, but these decisions do not.
 
 ### Approval and action boundary
 
-- Financial approval is only for real credits or money. Free account actions
+- Financial approval is only for real credits or money. For CLI agents: **Read cost-approval**, show the ASCII cost preview, and get an explicit user yes before paid scale. Free account actions
   are outside the financial cost gate.
 - A clear request authorizes the described table automation. Send authorization
   is confirmed in the conversation; it is not a table column.

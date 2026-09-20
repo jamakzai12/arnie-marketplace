@@ -1,9 +1,13 @@
 ---
 name: cost-approval
-description: Use the Arnie CLI before scaling paid or cost-unknown provider work. Prove tiny, price the real financial cost, cap it, and ask once. Free account actions are outside this gate.
+description: >-
+  REQUIRED before any paid or cost-unknown Arnie CLI run (Deepline, enrichment,
+  prospecting at scale, credit-charging columns). Prove tiny, show an ASCII cost
+  preview (credits + rough USD), get explicit user approval, then run once.
+  CLI/coding-agent only — not UI skills.
 ---
 
-# Cost Approval
+# Cost Approval (CLI)
 
 ## CLI access
 
@@ -13,16 +17,51 @@ or call MCP directly. If `arnie` is missing, run
 `npm install --global github:jamakzai12/arnie-marketplace`, then `arnie login`
 and `arnie tools`.
 
-One loop: **prove tiny → price → cap → ask → run.** Get the user's explicit cost go-ahead in this conversation.
+## Hard rule for coding agents (Grok Bot, Codex, Claude Code, …)
+
+**MUST NOT** start or widen a paid / credit-charging / cost-unknown run until
+you have:
+
+1. proven the path on a tiny sample,
+2. shown the user the **ASCII cost preview** below, and
+3. received **explicit yes** in this conversation for that exact scope and cap.
+
+Skipping the preview or treating silence as approval is a bug. Free account
+actions and formula-only columns are outside this gate.
+
+One loop: **prove tiny → price → cap → ask → run.**
 
 ## When this gate applies
 
 A run is **paid** when it charges credits or creates a real financial cost:
 
 - an **enrichment column** with a `creditCost` — charges `rows × creditCost` (per cell, not per run).
-- a **provider/ingredient call at row-scale** — per-call scrapes/searches/enrichment across rows.
+- a **provider/ingredient call at row-scale** — per-call scrapes/searches/enrichment across rows (including Deepline plays).
+- any **rerun / add_rows cascade** that will recompute chargeable cells.
 
-Exempt: formula-only columns, conditions, free account actions, a single one-off read, and cached reruns.
+Exempt: formula-only columns, conditions, free account actions, a single one-off read, and cached reruns that do not recompute.
+
+## Mandatory ASCII cost preview
+
+Before any paid scale call, send the user a block like this (fill every line;
+use `unknown` only when the rate truly is unknown — still ask):
+
+```text
+=== Arnie cost approval (CLI) ===
+Work:          <what will run>
+Table / scope: <table id or name>
+Rows:          <N admitted by condition> (of <total>)
+Columns:       <chargeable columns + creditCost each>
+Unit cost:     <credits/cell or $/call> [advertised] / <observed from proof if any>
+Credits est.:  <low>–<high>  (or exact)
+USD est.:      $<low>–$<high>  (or unknown)
+Cap:           max <N> rows / <credits> / $<amount>
+Proof:         <1–3 row result + billing.cost_usd if returned>
+===============================
+Approve this exact scope? Reply yes / no.
+```
+
+A missing item = not ready: run nothing paid.
 
 ## Price posture: cheapest equivalent first
 
@@ -36,7 +75,7 @@ Exempt: formula-only columns, conditions, free account actions, a single one-off
 
 1. **Prove tiny.** 1–3 rows, or one safe `copilot_workflow_workbench(action:"external_call")` sample. Read the actual output AND the real per-cell cost. Fix and re-prove until clean. Never price a run you haven't proven.
 2. **Price the spend.** Show two numbers when they exist: the current advertised unit price from the ingredient's exact-read description, and the actual charged proof cost from `billing.cost_usd`. Use the observed charge to estimate the full run. For platform-credit columns, calculate `chargeable rows × creditCost per chargeable column`, summed across chargeable columns. Count only rows the `condition` actually admits.
-3. **Ask once.** State the projected total or range, separate Arnies cost/credits, exact row scope, and cap in one concise question. A missing item = not ready: run nothing paid.
+3. **Ask once** with the ASCII preview. State projected total or range, Arnies credits, exact row scope, and cap in one concise question.
 4. **Cap the run.** Count admitted rows and rerun only the approved `rowIds`/`rowIndexes`. Never create a recurring schedule to cap a paid run. The cap is the ceiling; approval is the trigger. After the user approves in this CLI conversation, pass `showApprovalCard:false` and omit `projectedCost`/`arniesCost` because remote CLI/MCP cannot display Arnie Chat's web approval card.
 5. **Run once, then narrate:** what ran, what it cost, what's ready.
 
@@ -44,7 +83,7 @@ There is **no tool to read the user's remaining balance** — price the SPEND; n
 
 ## Public CLI approval contract
 
-This public agent runs through remote CLI/MCP, not the Arnie Chat approval-card surface. Never pass `showApprovalCard:true` here: it fails closed because this surface cannot show the card. Use the real persisted pilot as evidence, ask one short cost/scope/cap question, then call the approved rerun with `showApprovalCard:false`. Every sample rerun also passes `showApprovalCard:false`. Do not pass either cost field with `false`.
+This public agent runs through remote CLI/MCP, not the Arnie Chat approval-card surface. Never pass `showApprovalCard:true` here: it fails closed because this surface cannot show the card. Use the real persisted pilot as evidence, ask one short cost/scope/cap question with the ASCII preview, then call the approved rerun with `showApprovalCard:false`. Every sample rerun also passes `showApprovalCard:false`. Do not pass either cost field with `false`.
 
 ## Spend rules
 

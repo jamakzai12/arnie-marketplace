@@ -1,6 +1,9 @@
 ---
 name: prospecting
-description: Use the Arnie CLI for GTM prospecting — net-new companies/people, qualification, scoring, verification, and enrichment order. Routes to the focused motion skills and owns the general motion.
+description: >-
+  Company-first (and rare person-first) prospecting motion, qualification, and
+  coverage. BEFORE any paid/high-volume enrichment or Deepline prospecting,
+  Read cost-approval, show the ASCII cost preview, and get explicit user approval.
 ---
 
 # Prospecting

@@ -1,7 +1,12 @@
 ---
 name: workflow-execution
-description: Use the Arnie CLI before recipe/table writes, multi-step table work, widening, validation reads, and async/polling columns — the durable execution lifecycle, path lock, and post-write check.
+description: >-
+  Use the Arnie CLI before recipe/table writes, multi-step table work, widening,
+  validation reads, and async/polling columns — the durable execution lifecycle,
+  path lock, and post-write check. Paid widening/reruns require cost-approval
+  (ASCII preview + user yes) first.
 ---
+
 
 # Workflow Execution
 
@@ -26,7 +31,7 @@ This skill owns every durable table/workflow write, same-path repair, changed-ro
 - **Discovery and skills are context, not progress.** Never guess action names. Probes and durable writes are not discovery.
 - **Recipe writes are real commits, not probes.** Before the first `copilot_create_recipe`, decide the table shape and material route/spend choices. A clear bounded request authorizes its described table automation; ask only when a remaining user-owned choice or boundary materially changes the commit. Never turn that question into a manual approval/review/status column.
 - **After writes, do one bounded check** with `copilot_read_rows` or `copilot_workflow_workbench(action:"query")`. Reading rows is the truth — "the call returned" is not validation.
-- **Validation is not monitoring.** After one real sample proves an upstream path, widen it, add dependents, and queue their cells with `rerun_columns` and explicit `showApprovalCard:false` immediately; `add_column` never auto-runs. Remote CLI/MCP cannot show the Arnie Chat card, so use **cost-approval** before paid widening. Never wait for all rows to finish.
+- **Validation is not monitoring.** After one real sample proves an upstream path, widen it, add dependents, and queue their cells with `rerun_columns` and explicit `showApprovalCard:false` immediately; `add_column` never auto-runs. Remote CLI/MCP cannot show the Arnie Chat card, so **Read cost-approval**, show the ASCII cost preview, get explicit user approval, then paid widening. Never wait for all rows to finish.
 - **A status query is not a live progress feed.** Treat `table_cells.status` counts as observed at that moment. Running/blocking statuses are `pending`, `claimed`, `pending_repair`, `polling_wait`, `retry_scheduled`; terminal are `complete`, `skipped`, `error_permanent`. `NULL` means no runtime cell status — not complete, not pending. Only diagnose stuck execution after a fresh read proves no active run, no future wake, and runnable cells left unexecuted.
 - **Fix bad columns at the bad column.** Preserve existing rate/concurrency. Only actual table cells showing provider rate-limit failures allow an ingredient repair; then add or lower pacing only for the failing ingredient before retrying or widening.
 - **If one valid path remains, use it; do not ask.**
